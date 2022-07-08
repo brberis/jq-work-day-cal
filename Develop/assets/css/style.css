@@ -37,6 +37,7 @@ textarea{
 }
 
 .hour {
+  padding-top: 30px;
   background-color: #ffffff;
   color: #000000;
   border-top: 1px dashed #000000;
@@ -69,6 +70,8 @@ textarea{
   display: inline-block;
   width: 100%;
   text-align: center;
+  padding-top: 38px;
+
 }
 
 .saveBtn i:hover {
