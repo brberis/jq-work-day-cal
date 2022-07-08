@@ -65,7 +65,14 @@ textarea{
   color: white;
 }
 
+.saveBtn i {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
 .saveBtn i:hover {
   font-size: 20px;
   transition: all .3s ease-in-out;
 }
+
