@@ -8,17 +8,12 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link
       href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Work Day Scheduler</title>
   </head>
 
@@ -29,7 +24,28 @@
       <p id="currentDay" class="lead"></p>
     </header>
     <div class="container">
-      <!-- Timeblocks go here -->
+      <div class="row">
+        <div class="col-1 time-block hour">
+          <span>12PM</span>
+        </div>
+        <div class="col-10 textarea future">
+          <span></span>
+        </div>      
+        <div class="col-1 saveBtn">
+          <span class="oi oi-arrow-circle-bottom"></span>
+        </div>         
+      </div>
+      <div class="row">
+        <div class="col-1 time-block hour">
+          <span>12PM</span>
+        </div>
+        <div class="col-10 textarea future">
+          <span></span>
+        </div>      
+        <div class="col-1 saveBtn">
+          <span><i class="fa-solid fa-floppy-disk fa-lg"></i></span>
+        </div>         
+      </div>    
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
