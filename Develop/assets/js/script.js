@@ -224,7 +224,7 @@ var deleteEvent = function(eventDate) {
   }, "1000");
 }
 
-// update calendar every 30 min
+// update calendar every
 setInterval(function () {
   calendarBuilder(date);
 }, (1000 * 60) * 30);
