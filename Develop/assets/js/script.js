@@ -1,8 +1,4 @@
-// bind current date
-var date = moment().format("dddd, MMMM Do");
-$("#currentDay").text(date);
-
-// enter working hours
+var date = null;
 var start = "08:00";
 var end = "22:00";
 
@@ -11,12 +7,7 @@ var editing = false;
 var editingDatetime = "";
 var textInput = null;
 
-// number of hours
-var date = moment().format("YYYY-MM-DD");
-var startHour = moment(date + ' ' + start);
-var endHour = moment(date + ' ' + end);
-var duration = moment.duration(endHour.diff(startHour));
-var hours = duration.asHours();
+
 
 var loadEvets = function () {
   var eventsFromStorage = JSON.parse(localStorage.getItem("events"));
@@ -30,70 +21,121 @@ var loadEvets = function () {
 
 var events = loadEvets();
 
-for (var i = 0; i <= hours; i++) {
-  var dateTime = date + " " + startHour.format("LT")
-  newDate = moment(dateTime, "YYYY-MM-DD hh:mm A");
-  // apply new class if task is near/over due date
-  if (moment().isBefore(newDate)) {
-    eventColClass = "future";
-  } else if (Math.abs(moment().diff(newDate, "hours")) < 1) {
-    eventColClass = "present";
+var calendarBuilder = function(dateInput) {
+  
+  if (!dateInput){
+      date = moment().format("YYYY-MM-DD");
   } else {
-    eventColClass = "past";
+      date = moment(dateInput, "MM/DD/YYYY").format("YYYY-MM-DD");
   }
+  var startHour = moment(date + ' ' + start);
+  var endHour = moment(date + ' ' + end);
+  var duration = moment.duration(endHour.diff(startHour));
+  var hours = duration.asHours();
 
-  var row = $("<div>").addClass("row").attr("data-datetime", dateTime);
-  
-  var timeCol = $("<div>")
-    .addClass("col-1 time-block hour")
-    .attr("data-index", i);
-  
-  var timeSpan = $("<span>" + startHour.format("hA") + "</span>");
-  
+  // reset day calendar
+  $("#calendar").empty();
 
-  var eventCol = $("<div>")
-    .addClass("col-9 p-0 description " + eventColClass)
-    .attr("data-index", i);
-
-  var thisEvent = events.find(x => x.date === dateTime);
-  if (thisEvent?.date === dateTime){
-    eventColP = $("<p>")
-    .addClass("description")
-    .text(thisEvent.event);
-    eventCol.append(eventColP);
+  for (var i = 0; i <= hours; i++) {
+    var dateTime = date + " " + startHour.format("LT")
+    newDate = moment(dateTime, "YYYY-MM-DD hh:mm A");
+    // apply new class if task is near/over due date
+    if (moment().isBefore(newDate)) {
+      eventColClass = "future";
+    } else if (Math.abs(moment().diff(newDate, "hours")) < 1) {
+      eventColClass = "present";
+    } else {
+      eventColClass = "past";
+    }
+  
+    var row = $("<div>").addClass("row").attr("data-datetime", dateTime);
+    
+    var timeCol = $("<div>")
+      .addClass("col-1 time-block hour")
+      .attr("data-index", i);
+    
+    var timeSpan = $("<span>" + startHour.format("hA") + "</span>");
+    
+  
+    var eventCol = $("<div>")
+      .addClass("col-9 p-0 description " + eventColClass)
+      .attr("data-index", i);
+  
+    var thisEvent = events.find(x => x.date === dateTime);
+    if (thisEvent?.date === dateTime){
+      eventColP = $("<p>")
+      .addClass("description")
+      .text(thisEvent.event);
+      eventCol.append(eventColP);
+    }
+  
+    var saveCol = $("<div>")
+      .addClass("col-1 saveBtn")
+      .attr("data-index", i);
+  
+    var saveSpan = $("<span><i class='fa-solid fa-floppy-disk fa-lg'></i></span>");
+  
+    var deleteCol = $("<div>")
+      .addClass("col-1 deleteBtn")
+      .attr("data-index", i);
+  
+    var deleteSpan = $("<span><i class='fa-solid fa-trash-can fa-lg'></i></span>");
+  
+  
+    timeCol.append(timeSpan);
+    row.append(timeCol);
+  
+    
+    row.append(eventCol);
+  
+    saveCol.append(saveSpan);
+    row.append(saveCol);
+  
+    deleteCol.append(deleteSpan);
+    row.append(deleteCol);
+  
+    $("#calendar").append(row);
+  
+    startHour.add(1, 'hours')
   }
-
-  var saveCol = $("<div>")
-    .addClass("col-1 saveBtn")
-    .attr("data-index", i);
-
-  var saveSpan = $("<span><i class='fa-solid fa-floppy-disk fa-lg'></i></span>");
-
-  var deleteCol = $("<div>")
-    .addClass("col-1 deleteBtn")
-    .attr("data-index", i);
-
-  var deleteSpan = $("<span><i class='fa-solid fa-trash-can fa-lg'></i></span>");
-
-
-  timeCol.append(timeSpan);
-  row.append(timeCol);
-
-  
-  row.append(eventCol);
-
-  saveCol.append(saveSpan);
-  row.append(saveCol);
-
-  deleteCol.append(deleteSpan);
-  row.append(deleteCol);
-
-  $("#calendar").append(row);
-
-  startHour.add(1, 'hours')
 }
 
-// event text was clicked
+
+// bind current date
+var toThisDay = function(dateInput) {
+  if (!dateInput){
+    date = moment().format("dddd, MMMM Do");
+  } else {
+    console.log("invalis??",dateInput )
+    date = moment(dateInput, "MM/DD/YYYY").format("dddd, MMMM Do");
+  }
+  $("#currentDay").text(date);
+  $("input").attr("placeholder", moment(date, "dddd, MMMM Do").format("MM/DD/YYYY"));
+  calendarBuilder(dateInput);
+}
+
+toThisDay();
+
+// due date was clicked
+$("#thisDate").on("click", function() {
+  // get current text
+  date = $(this).text().trim();
+  var dateInput = $("<input>").attr("type", "text").addClass("form-control").attr("readonly","readonly").val(date);
+  $(this).replaceWith(dateInput);
+
+// enable jquery ui datepicker
+dateInput.datepicker({
+  minDate: -30,
+  onClose: function() {
+    toThisDay(dateInput.val());
+    // when calendar is closed, force a "change" event on the `dateInput`
+    $(this).trigger("change");
+  }
+});
+
+  // automatically bring up the calendar
+  dateInput.trigger("focus");
+});
 
 
   $("#calendar").on("click", ".col-9", function() {
