@@ -13,6 +13,7 @@ body {
   color: black;
   border-radius: 0;
   border-bottom: 10px solid black;
+  margin-bottom: 20px;
 }
 
 /* event editor */
@@ -33,7 +34,8 @@ textarea {
 }
 
 .dpicker {
-  margin-bottom: 15px;
+  margin-bottom: 25px;
+  width: 85%;
 }
 
 .calendar-icon {
@@ -144,6 +146,10 @@ textarea {
 
 /* mobile viewport */
 @media screen and (max-width: 500px) {
+  h1 {
+    font-size: 28px !important;
+  }
+
   .container {
     padding-left: 3px !important;
     padding-right: 10px !important;
