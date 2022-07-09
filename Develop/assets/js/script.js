@@ -3,9 +3,10 @@ var date = moment().format("dddd, MMMM Do");
 $("#currentDay").text(date);
 
 // enter working hours
-var start = "09:00";
-var end = "17:00";
+var start = "8:00";
+var end = "22:00";
 
+var events = [];
 var editing = false;
 var editingDatetime = "";
 var textInput = null;
@@ -19,6 +20,17 @@ var hours = duration.asHours();
 
 for (var i = 0; i <= hours; i++) {
   var dateTime = date + " " + startHour.format("LT")
+  newDate = moment(dateTime, "YYYY-MM-DD hh:mm A");
+  console.log(newDate);
+  // apply new class if task is near/over due date
+  if (moment().isBefore(newDate)) {
+    eventColClass = "future";
+  } else if (Math.abs(moment().diff(newDate, "hours")) < 1) {
+    eventColClass = "present";
+  } else {
+    eventColClass = "past";
+  }
+
   var row = $("<div>").addClass("row").attr("data-datetime", dateTime);
   
   var timeCol = $("<div>")
@@ -27,11 +39,10 @@ for (var i = 0; i <= hours; i++) {
   
   var timeSpan = $("<span>" + startHour.format("hA") + "</span>");
   
-  var eventCol = $("<div>")
-    .addClass("col-9 p-0 description future")
-    .attr("data-index", i);
 
-  // var eventSpan = $("<span>"); 
+  var eventCol = $("<div>")
+    .addClass("col-9 p-0 description " + eventColClass)
+    .attr("data-index", i);
 
   var saveCol = $("<div>")
     .addClass("col-1 saveBtn")
@@ -91,50 +102,22 @@ for (var i = 0; i <= hours; i++) {
 
 $("#calendar").on("blur", ".col-9", function() {
   textInput.trigger("focus");
-
-  // setTimeout(function() { $("textarea").focus(); }, 0);
-  // get current value of textarea
-  // var text = $(this).val();
-
-  // // get status type and position in the list
-  // var status = $(this)
-  //   .closest(".col-10")
-  //   .attr("id")
-  //   // .replace("list-", "");
-  // var index = $(this)
-  //   .closest(".list-group-item")
-  //   .index();
-
-  // // update task in array and re-save to localstorage
-  // tasks[status][index].text = text;
-  // saveTasks();
-
-  // recreate p element
-  // var eventS = $("<p>")
-  //   .addClass("description")
-  //   .text(text);
-
-  // replace textarea with new content
-  // $(this).replaceWith(eventS);
 });
 
 
-var activateSave = function(index) {
+var activateSave = function (index) {
   var saveBtnEl = $(".saveBtn[data-index="+index+"]");
   var deleteBtnEl = $(".deleteBtn[data-index="+index+"]");
+
   saveBtnEl.addClass("saveBtn-drag");
-
-
   deleteBtnEl.addClass("deleteBtn-drag");
-  saveBtnEl.on("click", function()  {
+
+  saveBtnEl.on("click", function ()  {
     saveBtnEl.addClass("slow-drag");  
 
     console.log(index);
   
       var texteditEl = $(".col-9[data-index="+index+"] textarea")
-      // var texteditEl = $(this).parent().find("textedit");
-      // .attr(editingDatetime)
-      // .find("textarea")
       console.log(texteditEl);
    
       var calEvent = textInput.val();
@@ -145,15 +128,15 @@ var activateSave = function(index) {
         .text(calEvent);
     
       // replace textarea with new content
-      $(texteditEl).replaceWith(eventS);
-      
-      
+      $(texteditEl).replaceWith(eventS);      
       hideButtons(saveBtnEl, deleteBtnEl);
 
+      saveEvent(editingDatetime, calEvent)
+      editingDatetime = null;
 
   });
 
-  deleteBtnEl.on("click", function()  {
+  deleteBtnEl.on("click", function ()  {
     saveBtnEl.addClass("slow-drag");  
 
     var eventDivEl = $(".col-9[data-index="+index+"]")
@@ -161,18 +144,31 @@ var activateSave = function(index) {
       
     hideButtons(saveBtnEl, deleteBtnEl);
 
+    deleteEvent(editingDatetime);
+
+    editingDatetime = null;
+
+
 
   });
 
 }
 
-var hideButtons = function(saveBtnEl, deleteBtnEl) {
+var hideButtons = function (saveBtnEl, deleteBtnEl) {
   saveBtnEl.removeClass("saveBtn-drag");
   deleteBtnEl.removeClass("deleteBtn-drag");
-  setTimeout(function() {
+  setTimeout(function () {
     saveBtnEl.removeClass("slow-drag");
   }, "1000");
   editing = false;
+}
+
+var saveEvent = function (eventDate, eventDescription) {
+  events.push({date: eventDate, event: eventDescription});
+}
+
+var deleteEvent = function (eventDate) {
+  events = events.filter(data => data.date != eventDate);
 }
 
 
