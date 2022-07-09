@@ -28,7 +28,7 @@ for (var i = 0; i <= hours; i++) {
   var timeSpan = $("<span>" + startHour.format("hA") + "</span>");
   
   var eventCol = $("<div>")
-    .addClass("col-10 p-0 future")
+    .addClass("col-9 p-0 description future")
     .attr("data-index", i);
 
   // var eventSpan = $("<span>"); 
@@ -39,6 +39,13 @@ for (var i = 0; i <= hours; i++) {
 
   var saveSpan = $("<span><i class='fa-solid fa-floppy-disk fa-lg'></i></span>");
 
+  var deleteCol = $("<div>")
+  .addClass("col-1 deleteBtn")
+  .attr("data-index", i);
+
+  var deleteSpan = $("<span><i class='fa-solid fa-trash-can fa-lg'></i></span>");
+
+
   timeCol.append(timeSpan);
   row.append(timeCol);
 
@@ -47,6 +54,10 @@ for (var i = 0; i <= hours; i++) {
 
   saveCol.append(saveSpan);
   row.append(saveCol);
+
+  deleteCol.append(deleteSpan);
+  row.append(deleteCol);
+
   $("#calendar").append(row);
 
   startHour.add(1, 'hours')
@@ -55,7 +66,7 @@ for (var i = 0; i <= hours; i++) {
 // event text was clicked
 
 
-  $("#calendar").on("click", ".col-10", function() {
+  $("#calendar").on("click", ".col-9", function() {
  
     var text = $(this)
       .text()
@@ -78,7 +89,7 @@ for (var i = 0; i <= hours; i++) {
   });
 
 
-$("#calendar").on("blur", ".col-10", function() {
+$("#calendar").on("blur", ".col-9", function() {
   textInput.trigger("focus");
 
   // setTimeout(function() { $("textarea").focus(); }, 0);
@@ -109,10 +120,18 @@ $("#calendar").on("blur", ".col-10", function() {
 
 
 var activateSave = function(index) {
-  $(".saveBtn[data-index="+index+"]").on("click", function()  {
+  var saveBtnEl = $(".saveBtn[data-index="+index+"]");
+  var deleteBtnEl = $(".deleteBtn[data-index="+index+"]");
+  saveBtnEl.addClass("saveBtn-drag");
+
+
+  deleteBtnEl.addClass("deleteBtn-drag");
+  saveBtnEl.on("click", function()  {
+    saveBtnEl.addClass("slow-drag");  
+
     console.log(index);
   
-      var texteditEl = $(".col-10[data-index="+index+"] textarea")
+      var texteditEl = $(".col-9[data-index="+index+"] textarea")
       // var texteditEl = $(this).parent().find("textedit");
       // .attr(editingDatetime)
       // .find("textarea")
@@ -127,15 +146,35 @@ var activateSave = function(index) {
     
       // replace textarea with new content
       $(texteditEl).replaceWith(eventS);
-      editing = false;
       
-   
-  
-  
-    // var text = $("#calendar", "p").val();
-    // console.log(calEvent);
+      
+      hideButtons(saveBtnEl, deleteBtnEl);
+
+
+  });
+
+  deleteBtnEl.on("click", function()  {
+    saveBtnEl.addClass("slow-drag");  
+
+    var eventDivEl = $(".col-9[data-index="+index+"]")
+    eventDivEl.empty();
+      
+    hideButtons(saveBtnEl, deleteBtnEl);
+
+
   });
 
 }
+
+var hideButtons = function(saveBtnEl, deleteBtnEl) {
+  saveBtnEl.removeClass("saveBtn-drag");
+  deleteBtnEl.removeClass("deleteBtn-drag");
+  setTimeout(function() {
+    saveBtnEl.removeClass("slow-drag");
+  }, "1000");
+  editing = false;
+}
+
+
 
 
