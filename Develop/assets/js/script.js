@@ -3,10 +3,10 @@ var date = moment().format("dddd, MMMM Do");
 $("#currentDay").text(date);
 
 // enter working hours
-var start = "8:00";
+var start = "08:00";
 var end = "22:00";
 
-var events = [];
+
 var editing = false;
 var editingDatetime = "";
 var textInput = null;
@@ -18,10 +18,21 @@ var endHour = moment(date + ' ' + end);
 var duration = moment.duration(endHour.diff(startHour));
 var hours = duration.asHours();
 
+var loadEvets = function () {
+  var eventsFromStorage = JSON.parse(localStorage.getItem("events"));
+  if (eventsFromStorage) {
+    return eventsFromStorage;
+  }else{
+    return [];
+  }
+   
+}
+
+var events = loadEvets();
+
 for (var i = 0; i <= hours; i++) {
   var dateTime = date + " " + startHour.format("LT")
   newDate = moment(dateTime, "YYYY-MM-DD hh:mm A");
-  console.log(newDate);
   // apply new class if task is near/over due date
   if (moment().isBefore(newDate)) {
     eventColClass = "future";
@@ -44,6 +55,14 @@ for (var i = 0; i <= hours; i++) {
     .addClass("col-9 p-0 description " + eventColClass)
     .attr("data-index", i);
 
+  var thisEvent = events.find(x => x.date === dateTime);
+  if (thisEvent?.date === dateTime){
+    eventColP = $("<p>")
+    .addClass("description")
+    .text(thisEvent.event);
+    eventCol.append(eventColP);
+  }
+
   var saveCol = $("<div>")
     .addClass("col-1 saveBtn")
     .attr("data-index", i);
@@ -51,8 +70,8 @@ for (var i = 0; i <= hours; i++) {
   var saveSpan = $("<span><i class='fa-solid fa-floppy-disk fa-lg'></i></span>");
 
   var deleteCol = $("<div>")
-  .addClass("col-1 deleteBtn")
-  .attr("data-index", i);
+    .addClass("col-1 deleteBtn")
+    .attr("data-index", i);
 
   var deleteSpan = $("<span><i class='fa-solid fa-trash-can fa-lg'></i></span>");
 
@@ -60,7 +79,7 @@ for (var i = 0; i <= hours; i++) {
   timeCol.append(timeSpan);
   row.append(timeCol);
 
-  // eventCol.append(eventSpan);
+  
   row.append(eventCol);
 
   saveCol.append(saveSpan);
@@ -114,8 +133,6 @@ var activateSave = function (index) {
 
   saveBtnEl.on("click", function ()  {
     saveBtnEl.addClass("slow-drag");  
-
-    console.log(index);
   
       var texteditEl = $(".col-9[data-index="+index+"] textarea")
       console.log(texteditEl);
@@ -132,7 +149,6 @@ var activateSave = function (index) {
       hideButtons(saveBtnEl, deleteBtnEl);
 
       saveEvent(editingDatetime, calEvent)
-      editingDatetime = null;
 
   });
 
@@ -146,7 +162,6 @@ var activateSave = function (index) {
 
     deleteEvent(editingDatetime);
 
-    editingDatetime = null;
 
 
 
@@ -163,12 +178,27 @@ var hideButtons = function (saveBtnEl, deleteBtnEl) {
   editing = false;
 }
 
+
 var saveEvent = function (eventDate, eventDescription) {
-  events.push({date: eventDate, event: eventDescription});
+    var eventEx = events.find(event => event.date === eventDate);
+    console.log(eventEx);
+    if (eventEx) {
+      events = events.filter(event => event.date != eventEx.date);
+      events.push({date: eventDate, event: eventDescription});
+    }else{
+      events.push({date: eventDate, event: eventDescription});
+    }
+
+  localStorage.setItem("events", JSON.stringify(events));
+  // editingDatetime = null;
+
 }
 
 var deleteEvent = function (eventDate) {
-  events = events.filter(data => data.date != eventDate);
+  events = events.filter(event => event.date != eventDate);
+  localStorage.setItem("events", JSON.stringify(events));
+  // editingDatetime = null;
+
 }
 
 
