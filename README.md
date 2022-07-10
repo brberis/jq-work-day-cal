@@ -15,7 +15,7 @@ This project is developed using jQuery, jQuery UI and Moment JS. A simple calend
 
 ## Getting Started
 
-![alt text](https://github.com/brberis/jq-mt-cal-app/blob/main/Develop/assets/images/web.png)
+![alt text](https://github.com/brberis/jq-work-day-cal/blob/main/Develop/assets/images/web.png)
 
 <br/>
 
@@ -28,7 +28,7 @@ This project is developed using jQuery, jQuery UI and Moment JS. A simple calend
 
 ### Live Demo  
 
-[Site Demo](https://brberis.github.io/jq-mt-cal-app/Develop)
+[Site Demo](https://brberis.github.io/jq-work-day-cal/Develop)
 
 
 ## Authors
@@ -42,6 +42,6 @@ Cristobal A Barberis
 
 * 0.1
     * JavaScript / jQuery / MomentJS
-    * See [insights](https://github.com/brberis/jq-mt-cal-app/pulse)
+    * See [insights](https://github.com/brberis/jq-work-day-cal/pulse)
 
 
