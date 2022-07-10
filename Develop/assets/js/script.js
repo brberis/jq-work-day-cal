@@ -169,14 +169,18 @@ var activateBtns = function(index) {
     saveBtnEl.addClass("slow-drag");  
       var texteditEl = $("#event-detail[data-index="+index+"] textarea")
       var calEvent = textInput.val();
-      // recreate p element
-      var eventS = $("<p>")
-        .addClass("description")
-        .text(calEvent);
-      // replace textarea with new content
-      $(texteditEl).replaceWith(eventS);      
+      if (calEvent != "") {
+        // recreate p element
+        var eventS = $("<p>")
+          .addClass("description")
+          .text(calEvent);
+        // replace textarea with new content
+        $(texteditEl).replaceWith(eventS); 
+        saveEvent(editingDatetime, calEvent)
+      }else{
+        deleteEvent(editingDatetime);
+      }
       hideButtons(saveBtnEl, deleteBtnEl);
-      saveEvent(editingDatetime, calEvent)
   });
 
   // on delete
