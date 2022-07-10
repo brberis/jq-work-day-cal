@@ -33,12 +33,17 @@ textarea {
   z-index: 999 !important;
 }
 
+#thisDate {
+  background: transparent;
+}
+
 .dpicker {
   margin-bottom: 25px;
   width: 85%;
 }
 
 .calendar-icon {
+  z-index: -1 !important;
   margin-left: -28px;
 }
 /* date-picker end */

@@ -116,7 +116,7 @@ toThisDay();
 $("#thisDate").on("click", function() {
   // get current text
   date = $(this).text().trim();
-  var dateInput = $("<input>").attr("type", "text").addClass("form-control").attr("readonly","readonly").val(date);
+  var dateInput = $("<input>").attr("type", "text").attr("id", "thisDate").addClass("form-control").attr("readonly","readonly").val(date);
   $(this).replaceWith(dateInput);
 
   // enable jquery ui datepicker
