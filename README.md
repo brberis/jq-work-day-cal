@@ -30,6 +30,15 @@ This project is developed using jQuery, jQuery UI and Moment JS. A simple calend
 
 [Site Demo](https://brberis.github.io/jq-work-day-cal/Develop)
 
+## How to Deploy
+
+To deploy Work Day Calendar, please follow these steps:
+
+1. Clone the repository by running the command git clone: 
+[https://github.com/brberis/jq-work-day-cal.git](https://github.com/brberis/jq-work-day-cal.git)
+2. Navigate to the root of the project directory using the command `cd repo-name`.
+3. Deploy it to your own repo.
+4. Use github pages to deploy.
 
 ## Authors
 
