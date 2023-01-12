@@ -19,6 +19,15 @@ This project is developed using jQuery, jQuery UI and Moment JS. A simple calend
 
 <br/>
 
+## Features and Technology
+
+- Date Picker 
+- Change color depending on schedule
+- Click to add/edit field
+- jQuery
+- MomentJs
+- Custom CSS
+
 ### ToDo List 
 
 * Save events on server side.
